@@ -149,6 +149,9 @@ L<http://github.com/cxw42/Dancer2-Plugin-MobileDevice/issues>
 This plugin is a port of L<Dancer::Plugin::MobileDevice>,
 initially written for an article of the Dancer advent calendar 2010.
 
+Thanks to the Dancer core developers for contributions.  Please see the
+package metadata for additional contributors.
+
 =head1 LICENSE
 
 Copyright (C) 2019 Christopher White E<lt>cxw@cpan.orgE<gt>

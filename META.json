@@ -67,6 +67,11 @@
    "version" : "0.000001",
    "x_authority" : "cpan:CXW",
    "x_contributors" : [
+      "Alberto Simões <ambs@cpan.org>",
+      "Alexis Sukrieh <sukria@cpan.org>",
+      "David Precious <bigpresh@cpan.org>",
+      "Franck Cuny <franckc@cpan.org>",
+      "Philippe Bruhat <book@cpan.org>",
       "Yanick Champoux <yanick@cpan.org>"
    ],
    "x_serialization_backend" : "JSON::PP version 2.27400_02",
