@@ -1,15 +1,21 @@
+use 5.008001;
 use strict;
 use warnings;
 
 use Test::More import => ['!pass'];
+use Test::NoWarnings;
+use Plack::Test;
+use HTTP::Request::Common;
 
-plan tests => 2;
+plan tests => 3;
 
 {
-    use Dancer;
+    package TestApp;
+    use Dancer2;
     use File::Spec;
-    use Dancer::Plugin::MobileDevice;
+    use Dancer2::Plugin::MobileDevice;
 
+    set template => 'simple';   # default is 'tiny'
     set views => File::Spec->catfile('t', 'views');
 
     get '/' => sub {
@@ -17,19 +23,17 @@ plan tests => 2;
     };
 }
 
-use Dancer::Test;
 
-$ENV{HTTP_USER_AGENT} = 'Android';
-is dancer_response( GET => '/', undef, { 
-        HTTP_USER_AGENT => 'Android'
-    })->{content},
-    "is_mobile_device: 1\n", 
+my $dut = Plack::Test->create(TestApp->to_app);
+my $resp;
+
+$resp = $dut->request( GET '/', 'User-Agent' => 'Android');
+is $resp->content,
+    "is_mobile_device: 1\n",
     "token is_mobile_device is present and valid for Android";
 
-$ENV{HTTP_USER_AGENT} = 'Mozilla';
-is dancer_response( GET => '/', undef, { 
-        HTTP_USER_AGENT => 'Mozilla' 
-    })->{content},
-    "is_mobile_device: 0\n", 
+$resp = $dut->request( GET '/', 'User-Agent' => 'Mozilla');
+is $resp->content,
+    "is_mobile_device: 0\n",
     "token is_mobile_device is present and valid for Mozilla";
 

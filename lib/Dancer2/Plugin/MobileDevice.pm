@@ -1,5 +1,4 @@
-package Dancer::Plugin::MobileDevice;
-#ABSTRACT: make a Dancer app mobile-aware
+package Dancer2::Plugin::MobileDevice;
 
 use strict;
 use warnings;
@@ -62,9 +61,15 @@ sub BUILD {
         Dancer2::Core::Hook->new(
             name => 'before_template_render',
             code => sub {
-                printf("%s:%s\n", __FILE__, __LINE__);
                 my $tokens = shift;
+                $plugin->app->request->var(is_mobile_device => $plugin->is_mobile_device);
                 $tokens->{'is_mobile_device'} = $plugin->is_mobile_device;
+
+                printf("%s:%s: %s mobile device\n", __FILE__, __LINE__,
+                    $plugin->is_mobile_device ? 'is' : 'is not');
+                #use Data::Dumper::Compact qw(ddc);
+                #use Test::More;
+                #diag ddc($tokens);
             }
         )
     );
@@ -123,7 +128,7 @@ this).
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Dancer::Plugin::MobileDevice
+    perldoc Dancer2::Plugin::MobileDevice
 
 You can also look for information at:
 
