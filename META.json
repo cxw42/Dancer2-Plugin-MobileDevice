@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "Make a Dancer2 app mobile-aware",
    "author" : [
-      "Chris White <cxwembedded@gmail.com>"
+      "Christopher White <cxw@cpan.org>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.999, CPAN::Meta::Converter version 2.150010",
@@ -42,6 +42,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Dancer2" : "0.204000",
             "perl" : "5.008001"
          }
       },
@@ -52,8 +53,22 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/cxw42/Dancer2-Plugin-MobileDevice/issues"
+      },
+      "homepage" : "https://github.com/cxw42/Dancer2-Plugin-MobileDevice",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/cxw42/Dancer2-Plugin-MobileDevice.git",
+         "web" : "https://github.com/cxw42/Dancer2-Plugin-MobileDevice"
+      }
+   },
+   "version" : "0.000001",
    "x_authority" : "cpan:CXW",
+   "x_contributors" : [
+      "Yanick Champoux <yanick@cpan.org>"
+   ],
    "x_serialization_backend" : "JSON::PP version 2.27400_02",
    "x_static_install" : 1
 }
