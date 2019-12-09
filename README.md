@@ -47,11 +47,15 @@ You can of course still override this layout by supplying a layout option to the
 `template` call in the usual way (see the [Dancer2](https://metacpan.org/pod/Dancer2) documentation for how to do
 this).
 
+**Caution**: Do not change `mobile_layout` during the processing of
+a request.  That is unsupported and the behaviour of the plugin is not
+guaranteed in that situation.
+
 # SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Dancer::Plugin::MobileDevice
+    perldoc Dancer2::Plugin::MobileDevice
 
 You can also look for information at:
 
@@ -63,10 +67,25 @@ You can also look for information at:
 Please report any bugs or feature requests to
 [http://github.com/cxw42/Dancer2-Plugin-MobileDevice/issues](http://github.com/cxw42/Dancer2-Plugin-MobileDevice/issues)
 
+# FUNCTIONS
+
+This section exists to satisfy [Pod::Coverage](https://metacpan.org/pod/Pod::Coverage) :D .
+
+## is\_mobile\_device
+
+Return truthy if the current request is from a mobile device.
+
+## BUILD
+
+Adds the hooks described above.
+
 # ACKNOWLEDGEMENTS
 
 This plugin is a port of [Dancer::Plugin::MobileDevice](https://metacpan.org/pod/Dancer::Plugin::MobileDevice),
 initially written for an article of the Dancer advent calendar 2010.
+
+Thanks to the Dancer core developers for contributions.  Please see the
+package metadata for additional contributors.
 
 # LICENSE
 

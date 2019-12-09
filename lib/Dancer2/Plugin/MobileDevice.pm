@@ -24,37 +24,44 @@ sub is_mobile_device {
 sub BUILD {
     my $plugin = shift;
 
-    # Set the mobile layout
-    if($plugin->config->{mobile_layout}) {
+    # Change the layout setting.  Save the old to reset the setting later.
+    # We check config->{mobile_layout} within the hook rather than outside
+    # so that the plugin will respond correctly if mobile_layout is
+    # changed between requests.
+    $plugin->app->add_hook(
+        Dancer2::Core::Hook->new(
+            name => 'before',
+            code => sub {
+                return unless $plugin->config->{mobile_layout};
+                return unless $plugin->is_mobile_device;
+                my $mobile_layout = $plugin->config->{mobile_layout};
+                $plugin->app->log(debug => "Using mobile layout $mobile_layout");
 
-        # Change the layout setting.  Save the old to reset the setting later.
-        $plugin->app->add_hook(
-            Dancer2::Core::Hook->new(
-                name => 'before',
-                code => sub {
-                    return unless $plugin->is_mobile_device;
-                    printf("%s:%s\n", __FILE__, __LINE__);
-                    my $mobile_layout = $plugin->config->{mobile_layout};
+                $plugin->app->request->var(orig_layout => $plugin->app->setting('layout'));
+                $plugin->app->setting(layout => $mobile_layout);
+            }
+        )
+    );
 
-                    $plugin->app->request->var(orig_layout => $plugin->app->setting('layout'));
-                    $plugin->app->setting(layout => $mobile_layout);
-                }
-            )
-        );
+    # After a request, reset the layout for the benefit of future requests.
+    # Don't check the state of the request just in case the mobile_layout
+    # has changed between the beginning and the end of the request (although
+    # I'm not sure how that could happen!).
+    $plugin->app->add_hook(
+        Dancer2::Core::Hook->new(
+            name => 'after',
+            code => sub {
+                my $vars = $plugin->app->request->vars;
+                return unless exists $vars->{orig_layout};
+                    # Can't check truthiness, since undef is a valid
+                    # orig_layout value.
 
-        # After a request, reset the layout for the benefit of future requests
-        $plugin->app->add_hook(
-            Dancer2::Core::Hook->new(
-                name => 'after',
-                code => sub {
-                    return unless $plugin->is_mobile_device;
-                    printf("%s:%s\n", __FILE__, __LINE__);
-                    $plugin->app->setting(layout => $plugin->app->request->var('orig_layout'));
-                }
-            )
-        );
-
-    }
+                $plugin->app->log(debug => "resetting layout to " .
+                    ($vars->{orig_layout} || '<falsy>'));
+                $plugin->app->setting(layout => $vars->{orig_layout});
+            }
+        )
+    );
 
     # Make variable 'is_mobile_device' available in templates
     $plugin->app->add_hook(
@@ -65,11 +72,9 @@ sub BUILD {
                 $plugin->app->request->var(is_mobile_device => $plugin->is_mobile_device);
                 $tokens->{'is_mobile_device'} = $plugin->is_mobile_device;
 
-                printf("%s:%s: %s mobile device\n", __FILE__, __LINE__,
-                    $plugin->is_mobile_device ? 'is' : 'is not');
-                #use Data::Dumper::Compact qw(ddc);
-                #use Test::More;
-                #diag ddc($tokens);
+                $plugin->app->log(debug => 'Requester ' .
+                    ($plugin->is_mobile_device ? 'is' : 'is not') .
+                    ' mobile device');
             }
         )
     );
@@ -124,6 +129,10 @@ You can of course still override this layout by supplying a layout option to the
 C<template> call in the usual way (see the L<Dancer2> documentation for how to do
 this).
 
+B<Caution>: Do not change C<mobile_layout> during the processing of
+a request.  That is unsupported and the behaviour of the plugin is not
+guaranteed in that situation.
+
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
@@ -148,6 +157,18 @@ L<GitHub|https://github.com/cxw42/Dancer2-Plugin-MobileDevice>
 
 Please report any bugs or feature requests to
 L<http://github.com/cxw42/Dancer2-Plugin-MobileDevice/issues>
+
+=head1 FUNCTIONS
+
+This section exists to satisfy L<Pod::Coverage> :D .
+
+=head2 is_mobile_device
+
+Return truthy if the current request is from a mobile device.
+
+=head2 BUILD
+
+Adds the hooks described above.
 
 =head1 ACKNOWLEDGEMENTS
 
