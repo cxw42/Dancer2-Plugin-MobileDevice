@@ -68,7 +68,7 @@
          "web" : "https://github.com/cxw42/Dancer2-Plugin-MobileDevice"
       }
    },
-   "version" : "0.000001",
+   "version" : "0.000002",
    "x_authority" : "cpan:CXW",
    "x_contributors" : [
       "Alberto Simões <ambs@cpan.org>",

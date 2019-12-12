@@ -3,7 +3,7 @@ package Dancer2::Plugin::MobileDevice;
 use strict;
 use warnings;
 
-our $VERSION = "0.000001";
+our $VERSION = "0.000002";
 
 =head1 NAME
 
@@ -172,7 +172,7 @@ Adds the hooks described above.
 
 =head1 ACKNOWLEDGEMENTS
 
-This plugin is a port of L<Dancer::Plugin::MobileDevice>,
+This plugin is a Dancer2 port of L<Dancer::Plugin::MobileDevice>,
 initially written for an article of the Dancer advent calendar 2010.
 
 Thanks to the Dancer core developers for contributions.  Please see the

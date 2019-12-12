@@ -81,7 +81,7 @@ Adds the hooks described above.
 
 # ACKNOWLEDGEMENTS
 
-This plugin is a port of [Dancer::Plugin::MobileDevice](https://metacpan.org/pod/Dancer::Plugin::MobileDevice),
+This plugin is a Dancer2 port of [Dancer::Plugin::MobileDevice](https://metacpan.org/pod/Dancer::Plugin::MobileDevice),
 initially written for an article of the Dancer advent calendar 2010.
 
 Thanks to the Dancer core developers for contributions.  Please see the
