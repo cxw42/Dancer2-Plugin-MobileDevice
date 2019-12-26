@@ -19,8 +19,8 @@ Dancer2::Plugin::MobileDevice - Make a Dancer2 app mobile-aware
 
 # DESCRIPTION
 
-A plugin for [Dancer2](https://metacpan.org/pod/Dancer2)-powered webapps to easily detect mobile clients and offer
-a simplified layout, and/or act in different ways.
+A plugin for [Dancer2](https://metacpan.org/pod/Dancer2)-powered webapps to easily detect mobile clients and
+offer a simplified layout, and/or act in different ways.
 
 The plugin offers a `is_mobile_device` keyword, which returns true if the
 device is recognised as a mobile device.
@@ -46,10 +46,6 @@ than whatever the current `layout` setting is.
 You can of course still override this layout by supplying a layout option to the
 `template` call in the usual way (see the [Dancer2](https://metacpan.org/pod/Dancer2) documentation for how to do
 this).
-
-**Caution**: Do not change `mobile_layout` during the processing of
-a request.  That is unsupported and the behaviour of the plugin is not
-guaranteed in that situation.
 
 # SUPPORT
 

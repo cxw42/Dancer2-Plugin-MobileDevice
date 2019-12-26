@@ -17,66 +17,57 @@ plugin_keywords qw(is_mobile_device);
 
 sub is_mobile_device {
     my $self = shift;
-    return (($self->app->request->user_agent || '')
+    return (($self->dsl->request->user_agent || '')
         =~ /(?:iP(?:ad|od|hone)|Android|BlackBerry|Mobile|Palm)/) || 0 ;
 } #is_mobile_device
 
 sub BUILD {
-    my $plugin = shift;
+    my $self = shift;
 
     # Change the layout setting.  Save the old to reset the setting later.
     # We check config->{mobile_layout} within the hook rather than outside
     # so that the plugin will respond correctly if mobile_layout is
     # changed between requests.
-    $plugin->app->add_hook(
-        Dancer2::Core::Hook->new(
-            name => 'before',
-            code => sub {
-                return unless $plugin->config->{mobile_layout};
-                return unless $plugin->is_mobile_device;
-                my $mobile_layout = $plugin->config->{mobile_layout};
-                $plugin->app->log(debug => "Using mobile layout $mobile_layout");
+    $self->dsl->hook('before',
+        sub {
+            return unless $self->config->{mobile_layout};
+            return unless $self->is_mobile_device;
+            my $mobile_layout = $self->config->{mobile_layout};
+            $self->dsl->debug("Using mobile layout $mobile_layout");
 
-                $plugin->app->request->var(orig_layout => $plugin->app->setting('layout'));
-                $plugin->app->setting(layout => $mobile_layout);
-            }
-        )
+            $self->dsl->request->var(orig_layout => $self->dsl->setting('layout'));
+            $self->dsl->setting(layout => $mobile_layout);
+        }
     );
 
     # After a request, reset the layout for the benefit of future requests.
     # Don't check the state of the request just in case the mobile_layout
     # has changed between the beginning and the end of the request (although
     # I'm not sure how that could happen!).
-    $plugin->app->add_hook(
-        Dancer2::Core::Hook->new(
-            name => 'after',
-            code => sub {
-                my $vars = $plugin->app->request->vars;
-                return unless exists $vars->{orig_layout};
-                    # Can't check truthiness, since undef is a valid
-                    # orig_layout value.
+    $self->dsl->hook('after',
+        sub {
+            my $vars = $self->dsl->request->vars;
+            return unless exists $vars->{orig_layout};
+                # Can't check truthiness, since undef is a valid
+                # orig_layout value.
 
-                $plugin->app->log(debug => "resetting layout to " .
-                    ($vars->{orig_layout} || '<falsy>'));
-                $plugin->app->setting(layout => $vars->{orig_layout});
-            }
-        )
+            $self->dsl->log(debug => "resetting layout to " .
+                ($vars->{orig_layout} || '<falsy>'));
+            $self->dsl->setting(layout => $vars->{orig_layout});
+        }
     );
 
     # Make variable 'is_mobile_device' available in templates
-    $plugin->app->add_hook(
-        Dancer2::Core::Hook->new(
-            name => 'before_template_render',
-            code => sub {
-                my $tokens = shift;
-                $plugin->app->request->var(is_mobile_device => $plugin->is_mobile_device);
-                $tokens->{'is_mobile_device'} = $plugin->is_mobile_device;
+    $self->dsl->hook('before_template_render',
+        sub {
+            my $tokens = shift;
+            $self->dsl->request->var(is_mobile_device => $self->is_mobile_device);
+            $tokens->{'is_mobile_device'} = $self->is_mobile_device;
 
-                $plugin->app->log(debug => 'Requester ' .
-                    ($plugin->is_mobile_device ? 'is' : 'is not') .
-                    ' mobile device');
-            }
-        )
+            $self->dsl->log(debug => 'Requester ' .
+                ($self->is_mobile_device ? 'is' : 'is not') .
+                ' mobile device');
+        }
     );
 
 } #BUILD
@@ -101,8 +92,8 @@ __END__
 
 =head1 DESCRIPTION
 
-A plugin for L<Dancer2>-powered webapps to easily detect mobile clients and offer
-a simplified layout, and/or act in different ways.
+A plugin for L<Dancer2>-powered webapps to easily detect mobile clients and
+offer a simplified layout, and/or act in different ways.
 
 The plugin offers a C<is_mobile_device> keyword, which returns true if the
 device is recognised as a mobile device.
@@ -128,10 +119,6 @@ than whatever the current C<layout> setting is.
 You can of course still override this layout by supplying a layout option to the
 C<template> call in the usual way (see the L<Dancer2> documentation for how to do
 this).
-
-B<Caution>: Do not change C<mobile_layout> during the processing of
-a request.  That is unsupported and the behaviour of the plugin is not
-guaranteed in that situation.
 
 =head1 SUPPORT
 
