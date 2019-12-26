@@ -31,6 +31,31 @@ my $app;
 my $dut = Plack::Test->create(TestApp->to_app);
 isa_ok $app, 'Dancer2::Core::App';
 
+# --- Code used in demonstrating
+# --- https://github.com/PerlDancer/Dancer2/issues/1531 -
+# --- not required for testing this plugin.
+diag "Got app $app from inside app";
+{
+    my ($app2) = grep { $_->name eq 'TestApp' } @{Dancer2->runner->apps};
+    if($app2) {
+        diag "Got app $app2 from runner";
+    } else {
+        diag "Couldn't find TestApp in runner";
+    }
+}
+
+{
+    my ($app3) = eval { TestApp->app };
+    if($app3) {
+        diag "Got app $app3 from app";
+    } else {
+        diag "Couldn't call TestApp->app: $@";
+    }
+}
+eval { TestApp->to_app->setting(layout => undef); };
+diag "Result of TestApp->to_app->setting: $@";
+# --- End of PerlDancer/Dancer2#1531 code
+
 sub resp_for_agent($$$) {
     my( $agent, $result, $comment ) = @_;
     diag '-' x 40;
