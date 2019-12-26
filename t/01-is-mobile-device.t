@@ -3,13 +3,12 @@ use strict;
 use warnings;
 
 use Test::More import => ['!pass'];
-use Test::NoWarnings;
 use Plack::Test;
 use HTTP::Request::Common;
 
 my @mobile_devices = qw(iPhone iPod iPad Android BlackBerry PalmOS);
 
-plan tests => @mobile_devices + 3;
+plan tests => @mobile_devices + 2;
 
 {
     package TestApp;

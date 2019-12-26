@@ -3,11 +3,10 @@ use strict;
 use warnings;
 
 use Test::More import => ['!pass'];
-use Test::NoWarnings;
 use Plack::Test;
 use HTTP::Request::Common;
 
-plan tests => 6;
+plan tests => 5;
 
 my $app;
 {
