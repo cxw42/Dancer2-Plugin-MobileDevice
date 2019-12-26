@@ -3,7 +3,7 @@ package Dancer2::Plugin::MobileDevice;
 use strict;
 use warnings;
 
-our $VERSION = "0.000002";
+our $VERSION = "0.000003";
 
 =head1 NAME
 

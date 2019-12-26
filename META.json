@@ -51,8 +51,7 @@
             "File::Spec" : "0",
             "HTTP::Request::Common" : "0",
             "Plack::Test" : "0",
-            "Test::More" : "0.98",
-            "Test::NoWarnings" : "0"
+            "Test::More" : "0.98"
          }
       }
    },
@@ -68,7 +67,7 @@
          "web" : "https://github.com/cxw42/Dancer2-Plugin-MobileDevice"
       }
    },
-   "version" : "0.000002",
+   "version" : "0.000003",
    "x_authority" : "cpan:CXW",
    "x_contributors" : [
       "Alberto Simões <ambs@cpan.org>",
